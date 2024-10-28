@@ -3,7 +3,8 @@ This code defines a class which holds a Cyprian date.
 """
 
 # Standard imports.
-from datetime import datetime, timedelta
+from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone
 
 # Non-standard imports.
 import ephem
@@ -15,11 +16,21 @@ from . import constants
 # MAIN CLASS #
 ##############
 
+@dataclass
 class CyprianDate:
-    def __init__(self, year: int, month: int, day: int):
-        self.year = year
-        self.month = month
-        self.day = day
+    year: int
+    month: int
+    day: int
+
+    def __str__(self) -> str:
+        month_name = constants.MONTH_NAMES[self.month]
+        month_str = month_name[:3]
+        day_str = str(self.day)
+        if len(day_str) == 1:
+            day_str = "0"+day_str
+        year_str = f"{constants.YEAR_INITIAL}{self.year}"
+        result = f"{day_str} {month_str} {year_str}"
+        return result
 
     def advance_one_day(self, current_greg: datetime):
         """ Find the next day in the calendar. """
@@ -61,7 +72,13 @@ def new_moon_tomorrow(greg: datetime) -> bool:
 def get_next_new_moon(greg: datetime) -> datetime:
     """ Get the Gregorian datetime for the next new moon. """
     ephem_date = ephem.next_new_moon(greg)
+    result = to_datetime(ephem_date)
+    return result
+
+def to_datetime(ephem_date: ephem.Date) -> datetime:
+    """ Convert an ephem date object into a timezone-aware datetime object. """
     result = ephem_date.datetime()
+    result = result.replace(tzinfo=timezone.utc)
     return result
 
 def fall_on_same_day(left: datetime, right: datetime) -> bool:
@@ -72,13 +89,13 @@ def fall_on_same_day(left: datetime, right: datetime) -> bool:
 
 def round_down_to_nearest_day(greg: datetime) -> datetime:
     """ Ronseal. """
-    result = datetime(greg.year, greg.month, greg.day)
+    result = datetime(greg.year, greg.month, greg.day, tzinfo=timezone.utc)
     return result
 
 def get_vernal_equinox(year: int) -> datetime:
     """ Ronseal. """
     ephem_date = ephem.next_vernal_equinox(str(year))
-    result = ephem_date.datetime()
+    result = to_datetime(ephem_date)
     return result
 
 def tomorrow_is_on_or_after_vernal_equinox(greg: datetime) -> bool:
@@ -95,10 +112,16 @@ def get_cyprian_new_year(year: int) -> datetime:
     New Year falling within that calendar year.
     """
     ephem_date = ephem.next_new_moon(get_vernal_equinox(year))
-    result = round_down_to_nearest_day(ephem_date.datetime())
+    unrounded = to_datetime(ephem_date)
+    result = round_down_to_nearest_day(unrounded)
     return result
 
-def get_cyprian_year(greg_year: int) -> int:
-    """ Ronseal. """
+def get_cyprian_year_beginning_with_greg_year(greg_year: int) -> int:
+    """ Get the Cyprian year which begins with the given Gregorian year. """
     result = greg_year-constants.CYPRIAN_GREGORIAN_YEAR_DIFF
+    return result
+
+def get_greg_year_ending_with_cyprian_year(cyprian_year: int) -> int:
+    """ Get the Gregorian year which ends with the given Cyprian year. """
+    result = cyprian_year+constants.CYPRIAN_GREGORIAN_YEAR_DIFF
     return result
