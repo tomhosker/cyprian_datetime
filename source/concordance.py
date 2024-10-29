@@ -10,9 +10,6 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from sqlite3 import Connection
 
-# Non-standard imports.
-import ephem
-
 # Local imports.
 from . import constants
 from .cyprian_date import (
@@ -148,8 +145,8 @@ class Concordance:
         ephemerals = (
             ("whole_greg_year", self.whole_greg_year),
             ("whole_cyprian_year", self.whole_cyprian_year),
-            ("vernal_equinox", self.this_vernal_equinox),
-            ("cyprian_new_year", self.this_cyprian_new_year)
+            ("vernal_equinox", self.this_vernal_equinox.isoformat()),
+            ("cyprian_new_year", self.this_cyprian_new_year.isoformat())
         )
         for pair in ephemerals:
             self.write_ephemeral(*pair)
@@ -162,12 +159,12 @@ class Concordance:
         """ Convert a given Gregorian date into its Cyprian equivalent. """
         if greg is None:
             greg = datetime.now(timezone.utc)
-        if force_write_first or self.write_first(greg=greg):
+        if force_write_first or self.should_write_first(greg=greg):
             self.write(new_greg_year=greg.year)
         self.establish_connection()
         return self.read_equivalent_cyprian(greg)
 
-    def write_first(
+    def should_write_first(
         self,
         greg: datetime = None,
         cyprian: CyprianDate = None
@@ -177,7 +174,7 @@ class Concordance:
             self.establish_connection()
             cache_greg_year = self.get_ephemeral("whole_greg_year")
             cache_cyprian_year = self.get_ephemeral("whole_cyprian_year")
-        except (sqlite3.OperationalError, ConcordanceError) as exc:
+        except (sqlite3.OperationalError, ConcordanceError):
             return True
         if greg and greg.year == cache_greg_year:
             return False
@@ -226,7 +223,7 @@ class Concordance:
         force_write_first: bool = False
     ) -> datetime:
         """ Convert a given Cyprian date into its Gregorian equivalent. """
-        if force_write_first or self.write_first(cyprian=cyprian):
+        if force_write_first or self.should_write_first(cyprian=cyprian):
             self.write(new_cyprian_year=cyprian.year)
         self.establish_connection()
         return self.read_equivalent_greg(cyprian)
@@ -246,7 +243,7 @@ class Concordance:
                 f"Expected to fetch 1 item, but fetched {len(extract)}"
             )
         constructor_args = extract[0]
-        result = datetime(*constructor_args)
+        result = datetime(*constructor_args, tzinfo=timezone.utc)
         return result
 
 ##################

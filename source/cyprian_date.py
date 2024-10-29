@@ -18,6 +18,7 @@ from . import constants
 
 @dataclass
 class CyprianDate:
+    """ The class in question. """
     year: int
     month: int
     day: int
