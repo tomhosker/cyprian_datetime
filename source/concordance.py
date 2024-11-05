@@ -151,7 +151,7 @@ class Concordance:
         for pair in ephemerals:
             self.write_ephemeral(*pair)
 
-    def convert_gregorian(
+    def convert_greg(
         self,
         greg: datetime = None,
         force_write_first: bool = False
