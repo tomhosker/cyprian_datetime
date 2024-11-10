@@ -4,6 +4,6 @@ calendar, and to convert between Gregorian and Cyprian dates.
 """
 
 # Local imports.
-from cyprian_date import CyprianDate
-from cyprian_datetime import CyprianDateTime
-from frontend_utils import convert_date
+from .cyprian_date import CyprianDate
+from .cyprian_datetime import CyprianDateTime
+from .frontend_utils import convert_date

@@ -26,3 +26,9 @@ class CyprianDateTime(datetime):
         """ The Cyprian equivalent to the current date. """
         self._cyprian = convert_date(self)  # Synchronise on each lookup.
         return self._cyprian
+
+    def __str__(self) -> str:
+        greg_str = super().__str__()
+        cyprian_str = str(self.cyprian)
+        result = f"{greg_str} = {cyprian_str}"
+        return result
