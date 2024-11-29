@@ -1,12 +1,11 @@
 #!/bin/env python3
 
 """
-This script displays the Cyprian equivalent of a given Gregorian date.
+This script displays the Gregorian equivalent of a given Cyprian date.
 """
 
 # Standard imports.
 import argparse
-from datetime import datetime
 from sys import exit
 
 # Bespoke imports.
@@ -20,23 +19,21 @@ def make_parser() -> argparse.ArgumentParser:
     """ Make the object which handles the command-line interface. """
     result = argparse.ArgumentParser()
     result.add_argument(
-        "--date-string",
-        default="",
-        dest="date_str",
-        help="The date to be converted in ISO format"
+        "date_str",
+        help="The Cyprian date to be converted, in DD-MMM-TY format"
     )
     return result
 
 def convert_date_str(date_str: str|None) -> CyprianDateTime|None:
-    """ Get the Cyprian equivalent to a Gregorian date, in string form. """
+    """
+    Get the CyprianDateTime object corresponding to a Gregorian date, with both
+    input and output being given in string form.
+    """
     try:
-        if date_str:
-            result = CyprianDateTime.fromisoformat(date_str)
-        else:
-            result = CyprianDateTime.now()
+        result = CyprianDateTime.from_cyprian_str(date_str)
     except:
         print(f"Something's not quite right with that date string: {date_str}")
-        print("Is it in ISO format?")
+        print("Is it in DD-MMM-TY format?")
         return None
     return result
 

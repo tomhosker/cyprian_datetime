@@ -31,4 +31,20 @@ MONTH_NAMES_LATIN = (
     "Duodecember",
     "Intercalaris"
 )
-MONTH_NAMES = MONTH_NAMES_LATIN
+SHORT_MONTH_NAMES_LATIN = (
+    None,
+    "Pri",
+    "Sec",
+    "Ter",
+    "Qua",
+    "Qui",
+    "Sex",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+    "Uno",
+    "Duo",
+    "Int"
+)
+MONTH_NAMES = SHORT_MONTH_NAMES_LATIN

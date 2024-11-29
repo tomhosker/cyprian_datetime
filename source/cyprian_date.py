@@ -5,6 +5,7 @@ This code defines a class which holds a Cyprian date.
 # Standard imports.
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
+from typing import Self
 
 # Non-standard imports.
 import ephem
@@ -59,6 +60,21 @@ class CyprianDate:
         self.year += 1
         self.month = 1
         self.day = 1
+
+    @classmethod
+    def from_str(cls, init_str: str) -> Self:
+        """
+        Create an instance of this class from a string.
+        Expected format is DD MMM TY.
+        """
+        day_str = init_str[0:2]
+        month_str = init_str[3:6]
+        year_str = init_str[7:]
+        init_day = int(day_str)
+        init_month = constants.MONTH_NAMES.index(month_str)
+        init_year = int(year_str[1:])
+        result = cls(init_day, init_month, init_year)
+        return result
 
 ####################
 # HELPER FUNCTIONS #
