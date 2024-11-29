@@ -7,7 +7,7 @@ from setuptools import setup
 
 # Local constants.
 PACKAGE_NAME = "cyprian_datetime"
-VERSION = "0.1.0"
+VERSION = "1.0.0"
 DESCRIPTION = "A Cyprian extension to the datetime package"
 GIT_URL_STEM = "https://github.com/tomhosker"
 AUTHOR = "Tom Hosker"
