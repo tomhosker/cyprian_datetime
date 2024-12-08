@@ -3,6 +3,7 @@ This code defines the extension of the standard datetime class.
 """
 
 # Standard imports.
+import json
 from datetime import datetime
 from typing import Self
 
@@ -27,6 +28,25 @@ class CyprianDateTime(datetime):
         result = f"{greg_str} = {cyprian_str}"
         return result
 
+    def to_dict(self) -> dict:
+        """ Get a dict representation of this object. """
+        result = {
+            "gregorian": super().__str__(),
+            "cyprian": {
+                "year": self.cyprian.year,
+                "month": self.cyprian.month,
+                "day": self.cyprian.day,
+                "string": str(self.cyprian)
+            }
+        }
+        return result
+
+    def to_json(self) -> str:
+        """ Get a JSON representation of this object. """
+        json_obj = json.dumps(self.to_dict())
+        result = str(json_obj)
+        return result
+
     @property
     def cyprian(self) -> CyprianDate:
         """ The Cyprian equivalent to the current date. """
@@ -48,3 +68,12 @@ class CyprianDateTime(datetime):
         """
         cyprian = CyprianDate.from_str(cyprian_str)
         return cls.from_cyprian(cyprian)
+
+####################
+# HELPER FUNCTIONS #
+####################
+
+def correct_weekday(datetime_weekday: int) -> int:
+    """ Adjust to system in which Sunday is the first day of the week. """
+    result = (datetime_weekday+1)%7
+    return result

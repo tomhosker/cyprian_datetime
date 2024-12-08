@@ -44,3 +44,23 @@ def test_cyprian_datetime_from_cyprian_str():
     assert cyprian_datetime.year == 2014
     assert cyprian_datetime.month == 3
     assert cyprian_datetime.day == 30
+
+def test_cyprian_datetime_to_dict():
+    """ Test that the correct dict is created. """
+    cyprian_datetime = CyprianDateTime(2024, 1, 1, tzinfo=timezone.utc)
+    actual = cyprian_datetime.to_dict()
+    assert actual["cyprian"]["year"] == 10
+    assert actual["cyprian"]["month"] == 10
+    assert actual["cyprian"]["day"] == 21
+    assert actual["gregorian"] == "2024-01-01 00:00:00+00:00"
+
+def test_cyprian_datetime_to_json():
+    """ Test that the correct JSON string is created. """
+    cyprian_datetime = CyprianDateTime(2024, 1, 1, tzinfo=timezone.utc)
+    actual = cyprian_datetime.to_json()
+    expected = (
+        '{"gregorian": "2024-01-01 00:00:00+00:00", '+
+        '"cyprian": {"year": 10, "month": 10, "day": 21, '+
+        '"string": "21 Dec T10"}}'
+    )
+    assert actual == expected

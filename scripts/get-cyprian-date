@@ -25,6 +25,13 @@ def make_parser() -> argparse.ArgumentParser:
         dest="date_str",
         help="The date to be converted in ISO format"
     )
+    result.add_argument(
+        "--as-json",
+        action="store_true",
+        default=True,
+        dest="as_json",
+        help="Get the output in JSON format"
+    )
     return result
 
 def convert_date_str(date_str: str|None) -> CyprianDateTime|None:
@@ -51,7 +58,10 @@ def run():
     date_str = args_obj.date_str
     converted = convert_date_str(date_str)
     if converted:
-        print(converted)
+        if args_obj.as_json:
+            print(converted.to_json())
+        else:
+            print(converted)
     else:
         exit(1)
 
