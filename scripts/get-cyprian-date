@@ -28,7 +28,7 @@ def make_parser() -> argparse.ArgumentParser:
     result.add_argument(
         "--as-json",
         action="store_true",
-        default=True,
+        default=False,
         dest="as_json",
         help="Get the output in JSON format"
     )
