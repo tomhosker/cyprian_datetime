@@ -32,12 +32,7 @@ class CyprianDateTime(datetime):
         """ Get a dict representation of this object. """
         result = {
             "gregorian": super().__str__(),
-            "cyprian": {
-                "year": self.cyprian.year,
-                "month": self.cyprian.month,
-                "day": self.cyprian.day,
-                "string": str(self.cyprian)
-            }
+            "cyprian": self.cyprian.to_dict()
         }
         return result
 

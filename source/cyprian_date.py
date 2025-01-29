@@ -25,13 +25,23 @@ class CyprianDate:
     day: int
 
     def __str__(self) -> str:
-        month_name = constants.MONTH_NAMES[self.month]
-        month_str = month_name[:3]
-        day_str = str(self.day)
-        if len(day_str) == 1:
-            day_str = "0"+day_str
+        month_str = self.get_month_str()
+        day_str = self.get_day_str()
         year_str = f"{constants.YEAR_INITIAL}{self.year}"
         result = f"{day_str} {month_str} {year_str}"
+        return result
+
+    def get_day_str(self) -> str:
+        """ Get a two-digit representation of the day. """
+        result = str(self.day)
+        if len(result) == 1:
+            result = "0"+result
+        return result
+
+    def get_month_str(self) -> str:
+        """ Get a three-letter representation of the month. """
+        month_name = constants.MONTH_NAMES[self.month]
+        result = month_name[:3]
         return result
 
     def advance_one_day(self, current_greg: datetime):
@@ -60,6 +70,37 @@ class CyprianDate:
         self.year += 1
         self.month = 1
         self.day = 1
+
+    def to_dict(self) -> dict:
+        """ Ronseal. """
+        result = {
+            "year": self.year,
+            "month": self.month,
+            "day": self.day,
+            "string": self.__str__()
+        }
+        return result
+
+    def to_html(self) -> str:
+        """ Ronseal. """
+        year_str = (
+            f'<span class="frak">{constants.YEAR_INITIAL}</span>'+
+            f"<sub>{self.year}</sub>"
+        )
+        result = f"{self.get_day_str()} {self.get_month_str()} {year_str}"
+        return result
+
+    def to_latex(self) -> str:
+        """ Ronseal. """
+        year_str = (
+            "$\\mathfrak{"+
+            constants.YEAR_INITIAL+
+            "}_{"+
+            str(self.year)+
+            "}$"
+        )
+        result = f"{self.get_day_str()} {self.get_month_str()} {year_str}"
+        return result
 
     @classmethod
     def from_str(cls, init_str: str) -> Self:

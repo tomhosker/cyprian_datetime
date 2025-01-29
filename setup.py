@@ -13,7 +13,7 @@ GIT_URL_STEM = "https://github.com/tomhosker"
 AUTHOR = "Tom Hosker"
 AUTHOR_EMAIL = "tomdothosker@gmail.com"
 SCRIPT_PATHS = ("scripts/get-cyprian-date",)
-INSTALL_REQUIRES = ("ephem", "hosker_utils")
+INSTALL_REQUIRES = ("dateutil", "ephem", "hosker_utils")
 INCLUDE_PACKAGE_DATA = True
 
 ###################################
