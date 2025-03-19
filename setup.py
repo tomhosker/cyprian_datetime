@@ -12,8 +12,8 @@ DESCRIPTION = "A Cyprian extension to the datetime package"
 GIT_URL_STEM = "https://github.com/tomhosker"
 AUTHOR = "Tom Hosker"
 AUTHOR_EMAIL = "tomdothosker@gmail.com"
-SCRIPT_PATHS = ("scripts/get-cyprian-date",)
-INSTALL_REQUIRES = ("dateutil", "ephem", "hosker_utils")
+SCRIPT_PATHS = ("scripts/get-cyprian-date", "scripts/convert-cyprian-date")
+INSTALL_REQUIRES = ("python-dateutil", "ephem", "hosker-utils")
 INCLUDE_PACKAGE_DATA = True
 
 ###################################

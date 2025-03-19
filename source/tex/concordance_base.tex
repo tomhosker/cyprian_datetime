@@ -1,0 +1,27 @@
+\documentclass{amsart}
+
+\usepackage[a5paper, margin=1cm]{geometry}
+
+\title{Concordance #YEAR}
+
+\begin{document}
+
+\thispagestyle{empty}
+
+\begin{center}
+    \textbf{CONCORDANCE #YEAR}
+\end{center}
+
+\begin{table}[h]
+    \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{Gregorian} & \textbf{Cyprian} & \textbf{Liturgical} \\
+        \hline
+        % EXAMPLE: 01 Jan 2025 & 03 Dec $\mathfrak{T}_{11}$ & --- \\
+#ROWS
+        \hline
+    \end{tabular}
+\end{table}
+
+\end{document}
+
