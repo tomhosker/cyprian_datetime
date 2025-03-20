@@ -26,11 +26,12 @@ PATH_TO_CONCORDANCE_BASE = str(PATH_OBJ_TO_TEX/"concordance_base.tex")
 class ExtendedConcordance:
     """ A class to hold an concordance extended in scope. """
     year: int
-    liturgical_summary: LiturgicalSummary|None = field(init=False, default=None)
+    liturgical_lookup: dict[str, str]|None = field(init=False, default=None)
     equivalents: list[dict]|None = field(init=False, default=None)
 
     def __post_init__(self):
-        self.liturgical_summary = LiturgicalSummary(self.year)
+        liturgical_summary = LiturgicalSummary(self.year)
+        self.liturgical_lookup = liturgical_summary.to_lookup()
         self.fill_equivalents()
 
     def fill_equivalents(self):
@@ -40,7 +41,7 @@ class ExtendedConcordance:
         while today.year == self.year:
             cyprian = convert_greg_to_cyprian(today)
             liturgical = \
-                find_liturgical_equivalent(today, self.liturgical_summary)
+                find_liturgical_equivalent(today, self.liturgical_lookup)
             equivalent = Equivalent(today, cyprian, liturgical)
             self.equivalents.append(equivalent)
             today += timedelta(days=1)
@@ -131,10 +132,9 @@ class Equivalent:
 
 def find_liturgical_equivalent(
     greg: datetime,
-    liturgical_summary: LiturgicalSummary
+    liturgical_lookup: dict[str, str]
 ) -> str|None:
     """ Find the liturgical equivalent to a given date, if it exists. """
     key = greg.isoformat()
-    lookup = liturgical_summary.to_lookup()
-    result = lookup.get(key)
+    result = liturgical_lookup.get(key)
     return result

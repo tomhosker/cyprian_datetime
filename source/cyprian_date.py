@@ -77,7 +77,7 @@ class CyprianDate:
             "year": self.year,
             "month": self.month,
             "day": self.day,
-            "string": self.__str__()
+            "string": str(self)
         }
         return result
 
